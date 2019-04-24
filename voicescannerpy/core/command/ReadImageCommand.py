@@ -27,4 +27,4 @@ class ReadImageCommand(object):
 
 
 #main
-print(ReadImageCommand({"path": "/home/ordimission/Documents/test_cpdh.png", "lang": "fr_FR"}).execute())
+#print(ReadImageCommand({"path": "/home/ordimission/Documents/test_cpdh.png", "lang": "fr_FR"}).execute())

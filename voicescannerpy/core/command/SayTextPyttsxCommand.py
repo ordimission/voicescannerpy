@@ -3,7 +3,8 @@
 from __future__ import print_function
 import pyttsx3;
 
-class SayTextCommand(object):
+
+class SayTextPyttsxCommand(object):
 
     def __init__(self, args):
         self.text = args.get('text', None)
@@ -14,8 +15,6 @@ class SayTextCommand(object):
         self.speed = args.get('speed', 100)
         self.espeak_path = args.get('espeak_path', '/usr/bin/espeak')
 
-
-
     def execute(self):
         engine = pyttsx3.init();
         engine.say(self.text);
@@ -23,4 +22,4 @@ class SayTextCommand(object):
 
 
 #main
-SayTextCommand({"text": "Mon nom est Amélie Duermael."}).execute()
+#SayTextPyttsxCommand({"text": "Mon nom est Amélie Duermael."}).execute()

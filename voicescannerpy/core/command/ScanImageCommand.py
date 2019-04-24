@@ -53,4 +53,4 @@ class ScanImageCommand(object):
 
 
 #main
-ScanImageCommand({"path": "/tmp/image_test.jpg", "scanner": "plustek", "mode": "color"}).execute()
+#ScanImageCommand({"path": "/tmp/image_test.jpg", "scanner": "plustek", "mode": "color"}).execute()

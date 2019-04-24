@@ -64,4 +64,4 @@ class SayTextCommand(object):
 
 
 #main
-SayTextCommand({"text":"Mon nom est Amélie Duermael. Je suis votre assistante","engine":"espeak"}).execute()
+#SayTextCommand({"text":"Mon nom est Amélie Duermael. Je suis votre assistante","engine":"espeak"}).execute()
