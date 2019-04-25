@@ -1,0 +1,90 @@
+# Use this playbook with ansible to install voicescannerpy on a remote Rpi
+# After a fresh install of a Rpi, you only need to active ssh
+# sudo systemctl enable ssh
+# sudo systemctl start ssh
+# the target pi must be declared in your inventory (e.g: /etc/ansible/hosts)
+# e.g: rpi ansible_host=192.168.1.45
+# usage:
+# ansible-playbook -vK rpi_install.yml
+# with version
+# ansible-playbook -vK rpi_voicescannerpy_install.yml -e "voicescannerpy_branch_to_install=dev"
+# connect to the pi and flush history
+# cat /dev/null > /home/pi/.bash_history && history -c  && exit
+
+- name: Install voicescannerpy on Rpi
+  hosts: "{{ targets | default('rpi') }}"
+  remote_user: pi
+  become: True
+
+  vars:
+    voicescannerpy_branch_to_install: "master"
+    python_packages_to_install:
+       - imutils
+       - pytesseract
+       - ttspico
+       - pyttsx3
+     
+  tasks:
+    - name: Set hostname
+      hostname:
+        name: "raspberrypi"
+
+    - name: Install required packages
+      apt:
+        name: "{{item}}"
+        state: present
+      with_items:
+        - git
+        - python-dev
+        - libsmpeg0
+        - libttspico-utils
+        - libsmpeg0
+        - flac
+        - libffi-dev
+        - libssl-dev
+        - portaudio19-dev
+        - build-essential
+        - sox
+        - libatlas3-base
+        - mplayer
+        - libyaml-dev
+        - libpython2.7-dev
+        - libav-tools
+        - libportaudio0
+        - libportaudio2
+        - libportaudiocpp0
+        - libxml2-dev
+        - libxslt1-dev
+        - libsane-dev
+        - zlib1g-dev
+        - portaudio19-dev
+        - python-yaml
+        - python-pycparser
+        - python-paramiko
+        - python-markupsafe
+        - python-setuptools
+        - python-pip
+        - python-pil
+        - apt-transport-https
+        - sane
+        - sane-utils
+        - tesseract-ocr
+        - tesseract-ocr-fra
+
+    - name: Install python packages
+      pip: name={{ item }}
+      with_items: "{{python_packages_to_install}}"
+
+    - name: install the package, force reinstall to the latest version
+      pip: 
+        name: https://github.com/ordimission/pyScanLib/zipball/master
+        state: forcereinstall
+
+    - name: Clone the project
+      git:
+        repo: "https://github.com/ordimission/voicescannerpy.git"
+        dest: "/home/pi/voicescannerpy"
+        version: "{{ voicescannerpy_branch_to_install }}"
+        accept_hostkey: yes
+
+
