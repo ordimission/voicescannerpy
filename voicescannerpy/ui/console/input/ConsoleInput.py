@@ -2,19 +2,20 @@ import os
 
 KEY_ENTER = 13
 KEY_ESC = 27
-KEY_SPACE = 32
-KEY_FIRST = 70
-KEY_LAST = 76
+KEY_SPACE = ' '
 KEY_UP = '\033[A'
 KEY_DOWN = '\033[B'
 KEY_RIGHT = '\033[C'
 KEY_LEFT = '\033[D'
+KEY_LAST = '\033[F'
+KEY_FIRST = '\033[H'
 
 if os.name == 'nt':
     import msvcrt
 
     def getch():
-        return msvcrt.getch().decode()
+        ch = msvcrt.getch()
+        return ch
 else:
     import sys, tty, termios
     fd = sys.stdin.fileno()
@@ -23,12 +24,28 @@ else:
     def getch():
         try:
             tty.setraw(sys.stdin.fileno())
-            ch = sys.stdin.buffer.raw.read(4).decode(sys.stdin.encoding)
-            if len(ch) == 1:
-                if ord(ch) < 32 or ord(ch) > 126:
-                    ch = ord(ch)
-            elif ord(ch[0]) == 27:
-                ch = '\033' + ch[1:]
+            tty.setcbreak(fd)
+            ch = sys.stdin.read(1)
+            if ch < ' ':
+                ch = ord(ch)
+            if ch == 27:
+                ch = '\033'
+                ch = ch + sys.stdin.read(1)
+                ch = ch + sys.stdin.read(1)
+
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
         return ch
+
+
+#goon = 1
+#while (goon):
+#    ch = getch()
+#    print(ch)
+#    if ch == ' ':
+#       goon = 0
+#    if ch == KEY_ENTER:
+#        print('Enter')
+#    if ch == KEY_DOWN:
+#        print('Down')
+
