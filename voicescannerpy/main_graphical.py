@@ -1,7 +1,6 @@
-from core.command.ReadImageCommand import ReadImageCommand
-from core.command.SayTextCommand import SayTextCommand
-from core.command.SayTextPyttsxCommand import SayTextPyttsxCommand
-from core.command.ScanImageCommand import ScanImageCommand
+from core.ocr.ReadImageCommand import ReadImageCommand
+from voicescannerpy.ui.voice.output.VoiceOutput import VoiceOutput
+from core.ocr.ScanImageCommand import ScanImageCommand
 import pygame
 from pygame.locals import *
 
@@ -14,6 +13,8 @@ image_path = "/tmp/image_test.jpg"
 scanner = "brother"
 engine = "picotts"
 
+voice_out = VoiceOutput({"engine": engine})
+
 while goon:
     for event in pygame.event.get():
         if (event.type == QUIT) or (event.type == KEYDOWN and event.key == K_ESCAPE):
@@ -21,33 +22,32 @@ while goon:
             goon = 0
         if event.type == KEYDOWN:
             if event.key == K_RETURN:
-                SayTextCommand({"text": "Lecture en cours", "engine": engine}).execute()
+                voice_out.speak("Lecture en cours")
                 ScanImageCommand({"path": image_path, "scanner": scanner, "mode": "color"}).execute()
                 paragraphs = ReadImageCommand({"path": image_path, "lang": "fr_FR"}).execute()
-                SayTextCommand({"text": str(len(paragraphs)) + " paragraphes", "engine": engine}).execute()
-                print("Scan " + str(len(paragraphs))+ " paragraphes")
+                voice_out.speak(str(len(paragraphs)) + " paragraphes")
+                print("Scan " + str(len(paragraphs)) + " paragraphes")
             if event.key == K_SPACE:
-                SayTextCommand({"text": "position " + str(index+1) + " sur " + str(len(paragraphs)), "engine": engine}).execute()
+                voice_out.speak("position " + str(index + 1) + " sur " + str(len(paragraphs)))
                 print("Space " + "position " + str(index+1) + " sur " + str(len(paragraphs)))
             if event.key == K_LEFT:
                 if index > 0:
                     index = index - 1
-                SayTextCommand(
-                    {"text": paragraphs[index], "engine": engine}).execute()
+                voice_out.speak(paragraphs[index])
                 print("Left " + paragraphs[index])
             if event.key == K_RIGHT:
                 if index < len(paragraphs) - 1:
                     index = index + 1
-                SayTextCommand({"text": paragraphs[index], "engine": engine}).execute()
+                voice_out.speak(paragraphs[index])
                 print("Right " + paragraphs[index])
             if event.key == K_DOWN:
-                SayTextCommand({"text": paragraphs[index], "engine": engine}).execute()
+                voice_out.speak(paragraphs[index])
                 print("Down " + paragraphs[index])
             if event.key == K_FIRST or event.key == K_PAGEUP:
                 index = 0
-                SayTextCommand({"text": paragraphs[index], "engine": engine}).execute()
+                voice_out.speak(paragraphs[index])
                 print("First " + paragraphs[index])
             if event.key == K_LAST or event.key == K_PAGEDOWN:
                 index = len(paragraphs) - 1
-                SayTextCommand({"text": paragraphs[index], "engine": engine}).execute()
+                voice_out.speak(paragraphs[index])
                 print("Last " + paragraphs[index])

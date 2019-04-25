@@ -48,7 +48,7 @@ class ScanImageCommand(object):
         #
         pil = scanLib.scan()
         pil.save(self.path)
-        scanLib.closeScanner()  # unselect selected scanner in setScanners()
+        scanLib.closeScanner()  # unselect selected scanner input setScanners()
         scanLib.close()  # Destory whole class
 
 

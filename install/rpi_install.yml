@@ -2,7 +2,7 @@
 # After a fresh install of a Rpi, you only need to active ssh
 # sudo systemctl enable ssh
 # sudo systemctl start ssh
-# the target pi must be declared in your inventory (e.g: /etc/ansible/hosts)
+# the target pi must be declared input your inventory (e.g: /etc/ansible/hosts)
 # e.g: rpi ansible_host=192.168.1.45
 # usage:
 # ansible-playbook -vK rpi_install.yml

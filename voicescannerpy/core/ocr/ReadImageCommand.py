@@ -22,7 +22,7 @@ class ReadImageCommand(object):
             text = pytesseract.image_to_string(Image.open(self.path))
         else:
             text = pytesseract.image_to_string(Image.open(self.path), lang=l)
-        # We'll use Pillow's Image class to open the image and pytesseract to detect the string in the image
+        # We'll use Pillow's Image class to open the image and pytesseract to detect the string input the image
         return filter(lambda x: len(x) > 1, text.split('\n\n'))
 
 

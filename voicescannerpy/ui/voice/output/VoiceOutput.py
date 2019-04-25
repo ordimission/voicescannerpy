@@ -8,12 +8,12 @@ import StringIO
 import sys
 from picotts import PicoTTS
 
-class SayTextCommand(object):
+
+class VoiceOutput(object):
 
     def __init__(self, args):
         reload(sys)
         sys.setdefaultencoding('utf8')
-        self.text = args.get('text', None)
         self.lang = args.get('lang', 'fr-FR')
         self.path = args.get('path', r"/tmp/output.wav")
         self.pitch = args.get('pitch', 50)
@@ -22,17 +22,17 @@ class SayTextCommand(object):
         self.espeak_exec_path = args.get('espeak_exec_path', r"/usr/bin/espeak")
         self.engine = args.get('engine', 'espeak')
 
-    def execute(self):
+    def speak(self, text):
         if self.engine == 'espeak':
             espeak_command = [self.espeak_exec_path, '-v' + self.lang, '-s' + str(self.speed), '-a' + str(self.amplitude),
-                             '-p' + str(self.pitch), '-w' + self.path, self.text]
+                             '-p' + str(self.pitch), '-w' + self.path, text]
             # generate the file with eSpeak
             subprocess.call(espeak_command, stderr=sys.stderr)
             f = wave.open(self.path, "rb")
         if self.engine == 'picotts':
             picotts = PicoTTS()
             picotts.voice = self.lang
-            synth = picotts.synth_wav(self.text)
+            synth = picotts.synth_wav(text)
             w = StringIO.StringIO(synth)
             f = wave.open(w)
 
