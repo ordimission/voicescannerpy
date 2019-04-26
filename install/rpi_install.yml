@@ -46,6 +46,7 @@
         - libssl-dev
         - portaudio19-dev
         - build-essential
+        - espeak
         - sox
         - libatlas3-base
         - mplayer

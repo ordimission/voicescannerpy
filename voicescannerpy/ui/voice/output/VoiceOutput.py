@@ -1,12 +1,7 @@
 #!/usr/bin/env python
 # coding=UTF-8
 from __future__ import print_function
-import subprocess
-import pyaudio
-import wave
-import StringIO
 import sys
-from picotts import PicoTTS
 
 
 class VoiceOutput(object):
@@ -23,19 +18,33 @@ class VoiceOutput(object):
         self.engine = args.get('engine', 'espeak')
 
     def speak(self, text):
-        if self.engine == 'espeak':
-            espeak_command = [self.espeak_exec_path, '-v' + self.lang, '-s' + str(self.speed), '-a' + str(self.amplitude),
-                             '-p' + str(self.pitch), '-w' + self.path, text]
-            # generate the file with eSpeak
-            subprocess.call(espeak_command, stderr=sys.stderr)
-            f = wave.open(self.path, "rb")
-        if self.engine == 'picotts':
-            picotts = PicoTTS()
-            picotts.voice = self.lang
-            synth = picotts.synth_wav(text)
-            w = StringIO.StringIO(synth)
-            f = wave.open(w)
+        import os
+        if os.name == 'nt':
+            import pyttsx3
+            engine = pyttsx3.init();
+            engine.say(text);
+            engine.runAndWait();
+        else:
+            import wave
+            if self.engine == 'espeak':
+                espeak_command = [self.espeak_exec_path, '-v' + self.lang, '-s' + str(self.speed), '-a' + str(self.amplitude),
+                                 '-p' + str(self.pitch), '-w' + self.path, text]
+                # generate the file with eSpeak
+                import subprocess
+                subprocess.call(espeak_command, stderr=sys.stderr)
+                f = wave.open(self.path, "rb")
+            if self.engine == 'picotts':
+                import StringIO
+                from picotts import PicoTTS
+                picotts = PicoTTS()
+                picotts.voice = self.lang
+                synth = picotts.synth_wav(text)
+                w = StringIO.StringIO(synth)
+                f = wave.open(w)
+            self.play(f)
 
+    def play(self, f):
+        import pyaudio
         # instantiate PyAudio
         p = pyaudio.PyAudio()
         # open stream
@@ -64,4 +73,4 @@ class VoiceOutput(object):
 
 
 #main
-#SayTextCommand({"text":"Mon nom est Amélie Duermael. Je suis votre assistante","engine":"espeak"}).execute()
+VoiceOutput({"engine":"picotts"}).speak("Mon nom est Amélie Duermael. Je suis votre assistante")
