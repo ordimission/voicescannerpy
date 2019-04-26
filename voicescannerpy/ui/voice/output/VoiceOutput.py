@@ -21,9 +21,12 @@ class VoiceOutput(object):
         import os
         if os.name == 'nt':
             import pyttsx3
-            engine = pyttsx3.init();
-            engine.say(text);
-            engine.runAndWait();
+            engine = pyttsx3.init()
+            if self.lang == 'fr-FR' or self.lang == 'fr_FR':
+                voice = engine.getProperty('voices')[0]  # the french voice
+                engine.setProperty('voice', voice.id)
+            engine.say(text)
+            engine.runAndWait()
         else:
             import wave
             if self.engine == 'espeak':
@@ -73,4 +76,4 @@ class VoiceOutput(object):
 
 
 #main
-VoiceOutput({"engine":"picotts"}).speak("Mon nom est Amélie Duermael. Je suis votre assistante")
+VoiceOutput({"engine":"picotts"}).speak("Mon nom est Amélie. Je suis votre assistante")
