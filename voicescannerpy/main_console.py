@@ -21,6 +21,7 @@ while goon:
     if key == KEY_ENTER:
         voice_out.speak("Lecture en cours")
         ScanImageCommand({"path": image_path, "scanner": scanner, "mode": "color"}).execute()
+        index = 0
         paragraphs = ReadImageCommand({"path": image_path, "lang": "fr_FR"}).execute()
         voice_out.speak(str(len(paragraphs)) + " paragraphes")
         print("Scan " + str(len(paragraphs))+ " paragraphes")
