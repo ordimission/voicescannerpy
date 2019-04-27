@@ -9,8 +9,8 @@ pygame.display.set_mode((640, 480))
 goon = 1
 paragraphs = ""
 index = 0
-image_path = "/tmp/image_test.jpg"
-scanner = "brother"
+image_path = "image_test.jpg"
+scanner = "Samsung"
 engine = "picotts"
 
 voice_out = VoiceOutput({"engine": engine})
