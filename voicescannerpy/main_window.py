@@ -11,9 +11,10 @@ paragraphs = ""
 index = 0
 image_path = "image_test.jpg"
 scanner = "Samsung"
-engine = "picotts"
+voice_engine = "picotts"
+read_image_engine = "tesseract"
 
-voice_out = VoiceOutput({"engine": engine})
+voice_out = VoiceOutput({"engine": voice_engine})
 
 while goon:
     for event in pygame.event.get():
@@ -24,7 +25,7 @@ while goon:
             if event.key == K_RETURN:
                 voice_out.speak("Lecture en cours")
                 ScanImageCommand({"path": image_path, "scanner": scanner, "mode": "color"}).execute()
-                paragraphs = ReadImageCommand({"path": image_path, "lang": "fr_FR", "engine": "tesseract"}).execute()
+                paragraphs = ReadImageCommand({"path": image_path, "lang": "fr_FR", "engine": read_image_engine}).execute()
                 voice_out.speak(str(len(paragraphs)) + " paragraphes")
                 print("Scan " + str(len(paragraphs)) + " paragraphes")
             if event.key == K_SPACE:

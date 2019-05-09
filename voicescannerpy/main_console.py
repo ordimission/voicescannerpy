@@ -9,20 +9,21 @@ paragraphs = ""
 index = 0
 image_path = "/tmp/image_test.jpg"
 scanner = "brother"
-engine = "picotts"
+voice_engine = "picotts"
+read_image_engine = "tesseract"
 
-voice_out = VoiceOutput({"engine": engine})
+voice_out = VoiceOutput({"engine": voice_engine})
 
 while goon:
     key = getch()
-    if key == KEY_ESC:
+    if key == KEY_UP:
         print("Quit")
         goon = 0
     if key == KEY_ENTER:
         voice_out.speak("Lecture en cours")
         ScanImageCommand({"path": image_path, "scanner": scanner, "mode": "color"}).execute()
         index = 0
-        paragraphs = ReadImageCommand({"path": image_path, "lang": "fr_FR"}).execute()
+        paragraphs = ReadImageCommand({"path": image_path, "lang": "fr_FR", "engine": read_image_engine}).execute()
         voice_out.speak(str(len(paragraphs)) + " paragraphes")
         print("Scan " + str(len(paragraphs))+ " paragraphes")
     if key == KEY_SPACE:
