@@ -25,6 +25,7 @@
        - pyttsx3
        - pyaudio
        - python-sane
+       - google-cloud-vision
      
   tasks:
     - name: Set hostname

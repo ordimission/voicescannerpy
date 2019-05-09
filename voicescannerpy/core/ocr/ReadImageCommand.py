@@ -1,29 +1,21 @@
 #!/usr/bin/env python
 from __future__ import print_function
-try:
-    from PIL import Image
-except ImportError:
-    import Image
-import pytesseract
+
 
 class ReadImageCommand(object):
 
     def __init__(self, args):
         self.path = args.get('path', 'scanImage.jpg')
         self.lang = args.get('lang', 'fr_FR')
+        self.engine = args.get('engine', 'tesseract')
 
     def execute(self):
-        l = None
-        if self.lang== 'fr' or self.lang.startswith('fr_'):
-            l = 'fra'
-        if self.lang == 'en' or self.lang.startswith('en_'):
-            l = 'eng'
-        if l is None:
-            text = pytesseract.image_to_string(Image.open(self.path))
-        else:
-            text = pytesseract.image_to_string(Image.open(self.path), lang=l)
-        # We'll use Pillow's Image class to open the image and pytesseract to detect the string input the image
-        return filter(lambda x: len(x) > 1, text.split('\n\n'))
+        if self.engine == 'tesseract':
+            from TesseractReadImageCommand import TesseractReadImageCommand
+            return TesseractReadImageCommand({"path": self.path, "lang": self.lang}).execute()
+        if self.engine == 'google':
+            from GoogleReadImageCommand import GoogleReadImageCommand
+            return GoogleReadImageCommand({"path": self.path, "lang": self.lang}).execute()
 
 
 #main

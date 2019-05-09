@@ -1,5 +1,5 @@
 from core.ocr.ReadImageCommand import ReadImageCommand
-from voicescannerpy.ui.voice.output.VoiceOutput import VoiceOutput
+from ui.voice.output.VoiceOutput import VoiceOutput
 from core.ocr.ScanImageCommand import ScanImageCommand
 import pygame
 from pygame.locals import *
@@ -24,7 +24,7 @@ while goon:
             if event.key == K_RETURN:
                 voice_out.speak("Lecture en cours")
                 ScanImageCommand({"path": image_path, "scanner": scanner, "mode": "color"}).execute()
-                paragraphs = ReadImageCommand({"path": image_path, "lang": "fr_FR"}).execute()
+                paragraphs = ReadImageCommand({"path": image_path, "lang": "fr_FR", "engine": "tesseract"}).execute()
                 voice_out.speak(str(len(paragraphs)) + " paragraphes")
                 print("Scan " + str(len(paragraphs)) + " paragraphes")
             if event.key == K_SPACE:
