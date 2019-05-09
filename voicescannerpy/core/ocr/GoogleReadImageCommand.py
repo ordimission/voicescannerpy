@@ -27,4 +27,4 @@ class GoogleReadImageCommand(object):
 
 
 #main
-print(GoogleReadImageCommand({"path": "/home/ordimission/Documents/test_cpdh.png", "lang": "fr_FR"}).execute())
+#print(GoogleReadImageCommand({"path": "/home/ordimission/Documents/test_cpdh.png", "lang": "fr_FR"}).execute())
