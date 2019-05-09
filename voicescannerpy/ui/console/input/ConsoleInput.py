@@ -2,7 +2,7 @@ import os
 
 KEY_ENTER = 13
 KEY_ESC = 27
-KEY_SPACE = ' '
+KEY_SPACE = 32
 KEY_UP = '\033[A'
 KEY_DOWN = '\033[B'
 KEY_RIGHT = '\033[C'
@@ -25,27 +25,12 @@ else:
         try:
             tty.setraw(sys.stdin.fileno())
             tty.setcbreak(fd)
-            ch = sys.stdin.read(1)
-            if ch < ' ':
-                ch = ord(ch)
-            if ch == 27:
-                ch = '\033'
-                ch = ch + sys.stdin.read(1)
-                ch = ch + sys.stdin.read(1)
-
+            ch = ord(sys.stdin.read(1))
+            if ch == KEY_ESC:
+                ch = ch + 256*ord(sys.stdin.read(1))
+                ch = ch + 256*256*ord(sys.stdin.read(1))
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
         return ch
 
-
-#goon = 1
-#while (goon):
-#    ch = getch()
-#    print(ch)
-#    if ch == ' ':
-#       goon = 0
-#    if ch == KEY_ENTER:
-#        print('Enter')
-#    if ch == KEY_DOWN:
-#        print('Down')
 
