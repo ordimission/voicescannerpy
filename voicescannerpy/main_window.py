@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# coding=UTF-8
+
 from core.ocr.ReadImageCommand import ReadImageCommand
 from ui.voice.output.VoiceOutput import VoiceOutput
 from core.ocr.ScanImageCommand import ScanImageCommand
@@ -19,7 +22,7 @@ X = 640
 Y = 480
 screen = pygame.display.set_mode((X, Y))
 # set the pygame window name
-pygame.display.set_caption('Show Text')
+pygame.display.set_caption('Voice scanner')
 
 
 goon = 1
@@ -31,7 +34,7 @@ voice_engine = "picotts"
 read_image_engine = "tesseract"
 
 voice_out = VoiceOutput({"engine": voice_engine})
-
+voice_out.speak("Mon nom est Amélie. Je suis votre assistante")
 while goon:
     for event in pygame.event.get():
         if (event.type == QUIT) or (event.type == KEYDOWN and event.key == K_ESCAPE):

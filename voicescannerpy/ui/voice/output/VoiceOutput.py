@@ -2,6 +2,14 @@
 # coding=UTF-8
 from __future__ import print_function
 import sys
+import os
+if os.name == 'nt':
+    import pyttsx3
+else:
+    import wave
+    import subprocess
+    import StringIO
+    from picotts import PicoTTS
 
 
 class VoiceOutput(object):
@@ -17,31 +25,31 @@ class VoiceOutput(object):
         self.espeak_exec_path = args.get('espeak_exec_path', r"/usr/bin/espeak")
         self.engine = args.get('engine', 'espeak')
 
-    def speak(self, text):
-        import os
         if os.name == 'nt':
-            import pyttsx3
-            engine = pyttsx3.init()
+            self.voice_output_engine = pyttsx3.init()
             if self.lang == 'fr-FR' or self.lang == 'fr_FR':
-                voice = engine.getProperty('voices')[0]  # the french voice
-                engine.setProperty('voice', voice.id)
-            engine.say(text)
-            engine.runAndWait()
+                voice = self.voice_output_engine.getProperty('voices')[0]  # the french voice
+                self.voice_output_engine.setProperty('voice', voice.id)
         else:
-            import wave
+            if self.engine == 'picotts':
+                self.voice_output_engine = PicoTTS()
+                self.voice_output_engine.voice = self.lang
+
+    def speak(self, text):
+        if os.name == 'nt':
+            self.voice_output_engine.say(text)
+            self.voice_output_engine.runAndWait()
+        else:
             if self.engine == 'espeak':
                 espeak_command = [self.espeak_exec_path, '-v' + self.lang, '-s' + str(self.speed), '-a' + str(self.amplitude),
                                  '-p' + str(self.pitch), '-w' + self.path, text]
                 # generate the file with eSpeak
-                import subprocess
                 subprocess.call(espeak_command, stderr=sys.stderr)
                 f = wave.open(self.path, "rb")
             if self.engine == 'picotts':
-                import StringIO
-                from picotts import PicoTTS
-                picotts = PicoTTS()
-                picotts.voice = self.lang
-                synth = picotts.synth_wav(text)
+                self.voice_output_engine = PicoTTS()
+                self.voice_output_engine.voice = self.lang
+                synth = self.voice_output_engine.synth_wav(text)
                 w = StringIO.StringIO(synth)
                 f = wave.open(w)
             self.play(f)
@@ -73,7 +81,3 @@ class VoiceOutput(object):
         # close PyAudio
         p.terminate()
 
-
-
-#main
-VoiceOutput({"engine":"picotts"}).speak("Mon nom est Amélie. Je suis votre assistante")

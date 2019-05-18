@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# coding=UTF-8
+
 from core.ocr.ReadImageCommand import ReadImageCommand
 from ui.voice.output.VoiceOutput import VoiceOutput
 from ui.console.input.ConsoleInput import *
@@ -8,12 +11,12 @@ goon = 1
 paragraphs = ""
 index = 0
 image_path = "/tmp/image_test.jpg"
-scanner = "brother"
+scanner = "plustek"
 voice_engine = "picotts"
-read_image_engine = "tesseract"
+read_image_engine = "google"
 
 voice_out = VoiceOutput({"engine": voice_engine})
-
+voice_out.speak("Mon nom est Amélie. Je suis votre assistante")
 while goon:
     key = getch()
     if key == KEY_UP:
