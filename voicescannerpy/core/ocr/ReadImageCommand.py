@@ -8,14 +8,15 @@ class ReadImageCommand(object):
         self.path = args.get('path', 'scanImage.jpg')
         self.lang = args.get('lang', 'fr_FR')
         self.engine = args.get('engine', 'tesseract')
+        self.split = args.get('split', True)
 
     def execute(self):
         if self.engine == 'tesseract':
             from TesseractReadImageCommand import TesseractReadImageCommand
-            return TesseractReadImageCommand({"path": self.path, "lang": self.lang}).execute()
+            return TesseractReadImageCommand({"path": self.path, "lang": self.lang, "split": self.split}).execute()
         if self.engine == 'google':
             from GoogleReadImageCommand import GoogleReadImageCommand
-            return GoogleReadImageCommand({"path": self.path, "lang": self.lang}).execute()
+            return GoogleReadImageCommand({"path": self.path, "lang": self.lang, "split": self.split}).execute()
 
 
 #main

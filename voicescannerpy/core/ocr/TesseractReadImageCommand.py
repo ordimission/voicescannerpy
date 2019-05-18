@@ -6,11 +6,13 @@ except ImportError:
     import Image
 import pytesseract
 
+
 class TesseractReadImageCommand(object):
 
     def __init__(self, args):
         self.path = args.get('path', 'scanImage.jpg')
         self.lang = args.get('lang', 'fr_FR')
+        self.split = args.get('split', True)
 
     def execute(self):
         l = None
@@ -23,7 +25,10 @@ class TesseractReadImageCommand(object):
         else:
             text = pytesseract.image_to_string(Image.open(self.path), lang=l)
         # We'll use Pillow's Image class to open the image and pytesseract to detect the string input the image
-        return filter(lambda x: len(x) > 1, text.split('\n\n'))
+        if self.split:
+            return filter(lambda x: len(x) > 1, text.split('\n\n'))
+        else:
+            return text
 
 
 #main

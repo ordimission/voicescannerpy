@@ -9,6 +9,7 @@ class GoogleReadImageCommand(object):
     def __init__(self, args):
         self.path = args.get('path', 'scanImage.jpg')
         self.lang = args.get('lang', 'fr_FR')
+        self.split = args.get('split', True)
 
     def execute(self):
         """
@@ -23,7 +24,10 @@ class GoogleReadImageCommand(object):
 
         response = client.document_text_detection(image=image)
         text = response.full_text_annotation.text
-        return filter(lambda x: len(x) > 1, text.split('\n'))
+        if self.split:
+            return filter(lambda x: len(x) > 1, text.split('\n'))
+        else:
+            return text
 
 
 #main
