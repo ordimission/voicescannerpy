@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # coding=UTF-8
 
-from core.ocr.ReadImageCommand import ReadImageCommand
-from ui.voice.output.VoiceOutput import VoiceOutput
-from ui.console.input.ConsoleInput import *
-from core.ocr.ScanImageCommand import ScanImageCommand
+from core.command.text.vision.ReadImageCommand import ReadImageCommand
+from ui.output.SpeakerVoiceOutput import SpeakerVoiceOutput
+from ui.input.KeyboardInput import *
+from ui.input.ScannerInput import ScannerInput
 
 
 goon = 1
@@ -15,7 +15,7 @@ scanner = "plustek"
 voice_engine = "picotts"
 read_image_engine = "google"
 
-voice_out = VoiceOutput({"engine": voice_engine})
+voice_out = SpeakerVoiceOutput({"engine": voice_engine})
 voice_out.speak("Mon nom est Amélie. Je suis votre assistante")
 while goon:
     key = getch()
@@ -24,7 +24,7 @@ while goon:
         goon = 0
     if key == KEY_ENTER:
         voice_out.speak("Lecture en cours")
-        ScanImageCommand({"path": image_path, "scanner": scanner, "mode": "color"}).execute()
+        ScannerInput({"path": image_path, "scanner": scanner, "mode": "color"}).execute()
         index = 0
         paragraphs = ReadImageCommand({"path": image_path, "lang": "fr_FR", "engine": read_image_engine}).execute()
         voice_out.speak(str(len(paragraphs)) + " paragraphes")

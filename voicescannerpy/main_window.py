@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # coding=UTF-8
 
-from core.ocr.ReadImageCommand import ReadImageCommand
-from ui.voice.output.VoiceOutput import VoiceOutput
-from core.ocr.ScanImageCommand import ScanImageCommand
+from core.command.text.vision.ReadImageCommand import ReadImageCommand
+from ui.output.SpeakerVoiceOutput import SpeakerVoiceOutput
+from ui.output.SpeakerOutput import SpeakerOutput
+from ui.input.ScannerInput import ScannerInput
 import pygame
 from pygame.locals import *
 
@@ -15,6 +16,16 @@ def display_text(str):
     screen.blit(text,
                 (X // 2 - text.get_width() // 2, Y // 2 - text.get_height() // 2))
     pygame.display.flip()
+
+
+ # generates a wave
+def speak(self, text):
+    import os
+    if os.name == 'nt':
+        self.execute(text)
+    else:
+        f = self.execute(text)
+        SpeakerOutput.play(f)
 
 
 pygame.init()
@@ -33,7 +44,7 @@ scanner = "Samsung"
 voice_engine = "picotts"
 read_image_engine = "tesseract"
 
-voice_out = VoiceOutput({"engine": voice_engine})
+voice_out = SpeakerVoiceOutput({"engine": voice_engine})
 voice_out.speak("Mon nom est Amélie. Je suis votre assistante")
 while goon:
     for event in pygame.event.get():
@@ -44,7 +55,7 @@ while goon:
             if event.key == K_RETURN:
                 voice_out.speak("Lecture en cours")
                 display_text("Lecture en cours")
-                ScanImageCommand({"path": image_path, "scanner": scanner, "mode": "color"}).execute()
+                ScannerInput({"path": image_path, "scanner": scanner, "mode": "color"}).execute()
                 paragraphs = ReadImageCommand({"path": image_path, "lang": "fr_FR", "engine": read_image_engine}).execute()
                 voice_out.speak(str(len(paragraphs)) + " paragraphes")
                 display_text("Scan " + str(len(paragraphs)) + " paragraphes")

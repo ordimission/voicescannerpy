@@ -2,12 +2,12 @@
 # After a fresh install of a Rpi, you only need to active ssh
 # sudo systemctl enable ssh
 # sudo systemctl start ssh
-# the target pi must be declared input your inventory (e.g: /etc/ansible/hosts)
+# the target pi must be declared in your inventory (e.g: /etc/ansible/hosts)
 # e.g: rpi ansible_host=192.168.1.45
 # usage:
 # ansible-playbook -vK rpi_install.yml
 # with version
-# ansible-playbook -vK rpi_voicescannerpy_install.yml -e "voicescannerpy_branch_to_install=dev"
+# ansible-playbook -vK rpi_install.yml -e "voicescannerpy_branch_to_install=dev"
 # connect to the pi and flush history
 # cat /dev/null > /home/pi/.bash_history && history -c  && exit
 
@@ -74,8 +74,8 @@
         - apt-transport-https
         - sane
         - sane-utils
-        - tesseract-ocr
-        - tesseract-ocr-fra
+        - tesseract-vision
+        - tesseract-vision-fra
         - swig
          
 
